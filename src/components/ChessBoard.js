@@ -13,10 +13,8 @@ const initialBoardSetup = [
 ];
 
 const pieceImages = {
-  'P': '/images/pw.svg', 'R': '/images/rw.svg', 'N': '/images/nw.svg',
-  'B': '/images/bw.svg', 'Q': '/images/qw.svg', 'K': '/images/kw.svg',
-  'p': '/images/pb.svg', 'r': '/images/rb.svg', 'n': '/images/nb.svg',
-  'b': '/images/bb.svg', 'q': '/images/qb.svg', 'k': '/images/kb.svg'
+  'P': '/images/pw.svg', 'R': '/images/rw.svg', 'N': '/images/nw.svg', 'B': '/images/bw.svg', 'Q': '/images/qw.svg', 'K': '/images/kw.svg',
+  'p': '/images/pb.svg', 'r': '/images/rb.svg', 'n': '/images/nb.svg', 'b': '/images/bb.svg', 'q': '/images/qb.svg', 'k': '/images/kb.svg'
 };
 
 const ChessBoard = () => {
@@ -51,7 +49,7 @@ const ChessBoard = () => {
 
   const isValidMove = (piece, startRow, startCol, endRow, endCol, boardState) => {
     const dx = Math.abs(endCol - startCol);
-    const dy = Math.abs(endRow - startRow);
+    const dy = endRow - startRow;
 
     if (boardState[endRow][endCol] && ((piece.toUpperCase() === piece && boardState[endRow][endCol].toUpperCase() === boardState[endRow][endCol]) || 
                                   (piece.toLowerCase() === piece && boardState[endRow][endCol].toLowerCase() === boardState[endRow][endCol]))) {
@@ -64,7 +62,7 @@ const ChessBoard = () => {
           if (startRow === 6 && endRow === 4 && dx === 0 && boardState[endRow][endCol] === '' && boardState[endRow + 1][endCol] === '') { // First move two squares
             return true;
           }
-          if (startRow === 3 && endRow === 2 && dx === 1 && boardState[endRow][endCol] === '' && enPassant && enPassant.row === endRow && enPassant.col === endCol) { // En passant
+          if (startRow === 3 && endRow === 2 && Math.abs(startCol - endCol) === 1 && boardState[endRow][endCol] === '' && enPassant && enPassant.row === endRow && enPassant.col === endCol) { // En passant
             return true;
           }
           return (dy === -1 && dx === 0 && boardState[endRow][endCol] === '') || // Move forward
@@ -73,22 +71,22 @@ const ChessBoard = () => {
           if (startRow === 1 && endRow === 3 && dx === 0 && boardState[endRow][endCol] === '' && boardState[endRow - 1][endCol] === '') { // First move two squares
             return true;
           }
-          if (startRow === 4 && endRow === 5 && dx === 1 && boardState[endRow][endCol] === '' && enPassant && enPassant.row === endRow && enPassant.col === endCol) { // En passant
+          if (startRow === 4 && endRow === 5 && Math.abs(startCol - endCol) === 1 && boardState[endRow][endCol] === '' && enPassant && enPassant.row === endRow && enPassant.col === endCol) { // En passant
             return true;
           }
           return (dy === 1 && dx === 0 && boardState[endRow][endCol] === '') || // Move forward
                  (dy === 1 && dx === 1 && boardState[endRow][endCol] !== ''); // Capture
         }
       case 'r': // Rook
-        return (dx === 0 || dy === 0) && !isPathBlocked(startRow, startCol, endRow, endCol, boardState);
+        return (dx === 0 || Math.abs(dy) === 0) && !isPathBlocked(startRow, startCol, endRow, endCol, boardState);
       case 'n': // Knight
-        return dx * dy === 2;
+        return dx * Math.abs(dy) === 2;
       case 'b': // Bishop
-        return dx === dy && !isPathBlocked(startRow, startCol, endRow, endCol, boardState);
+        return dx === Math.abs(dy) && !isPathBlocked(startRow, startCol, endRow, endCol, boardState);
       case 'q': // Queen
-        return (dx === 0 || dy === 0 || dx === dy) && !isPathBlocked(startRow, startCol, endRow, endCol, boardState);
+        return (dx === 0 || Math.abs(dy) === 0 || dx === Math.abs(dy)) && !isPathBlocked(startRow, startCol, endRow, endCol, boardState);
       case 'k': // King
-        if (dx <= 1 && dy <= 1) return true; // Normal king move
+        if (dx <= 1 && Math.abs(dy) <= 1) return true; // Normal king move
 
         // Castling
         if (dx === 2 && dy === 0 && !kingMoved[turn]) {
