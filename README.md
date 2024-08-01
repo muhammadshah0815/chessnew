@@ -1,4 +1,6 @@
 # React Chess Game
+## Note
+This repository is a cleaned-up version of my original chess game project, named [chessGame](https://github.com/your-github-username/chessGame), which is actively being developed with other collaborators. I created this repository to separate my work, clean up the codebase, and manage it more independently. If you wish to see the original workflow, feel free to navigate to that repository!
 
 ## Table of Contents
 - [Introduction](#introduction)
